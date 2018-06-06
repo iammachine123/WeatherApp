@@ -22,7 +22,7 @@ public class OpenApi {
     }
 
     public void getCityData(City city, Data data, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
-        String url = ENDPOINT + data.name().toLowerCase() + "?q=" + city.toString() + "&appid=" + key;
+        String url = ENDPOINT + data.name().toLowerCase() + "?q=" + city.getName() + "," + city.getCountry() + "&appid=" + key;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, responseListener, errorListener);
         Volley.newRequestQueue(context).add(jsonObjectRequest);
     }
