@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="0.006" tools:layout_editor_absoluteY="0dp"/>
     <TextView
-            android:text="Weather"
+            android:text="@string/weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/weatherTextView"
             app:layout_constraintTop_toTopOf="parent"
@@ -25,15 +25,30 @@
             android:layout_marginBottom="8dp" android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent" android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintHorizontal_bias="0.025"
-            app:layout_constraintVertical_bias="0.0"/>
-    <TextView
-            android:text="Forecast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/forecastTextView"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.067"/>
+    <EditText
+            android:layout_width="169dp"
+            android:layout_height="44dp"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="@string/city_to_add"
+            android:id="@+id/cityEditText" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="8dp" android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent" android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintHorizontal_bias="0.025"/>
+            app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.048"/>
+    <EditText
+            android:layout_width="137dp"
+            android:layout_height="44dp"
+            android:hint="@string/country_code"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/countryCodeeditText" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp" android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent" android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent" app:layout_constraintHorizontal_bias="0.826"
+            app:layout_constraintVertical_bias="0.048"/>
 
 </android.support.constraint.ConstraintLayout>
