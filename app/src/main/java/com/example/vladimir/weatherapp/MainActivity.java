@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinner;
     private TextView weather;
     private String weatherText = "", forecastText = "";
+    private EditText cityEditText, countryCodeEditText;
+    private ArrayAdapter<City> citiesAdapter;
 
     private OpenApi openApi;
 
@@ -34,38 +36,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         openApi = new OpenApi(getApplicationContext());
 
-
         initUI();
     }
 
     private void initUI() {
         spinner = findViewById(R.id.spinner);
         weather = findViewById(R.id.weatherTextView);
-
-        ArrayAdapter<City> adapter =
-                new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, new ArrayList<>(addedCities));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
+        cityEditText = findViewById(R.id.cityEditText);
+        countryCodeEditText = findViewById(R.id.countryCodeEditText);
+        citiesAdapter = new ArrayAdapter<City>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, new ArrayList<>()) {{
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            addAll(addedCities);
+        }};
+        spinner.setAdapter(citiesAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (spinner.getSelectedItem() != null) {
-                    openApi.getCityData((City) spinner.getSelectedItem(),
-                            OpenApi.Data.WEATHER,
-                            response -> {
-                                weatherText = parseWeather(response);
-                                weather.setText(weatherText + forecastText);
-                            },
-                            error -> Toast.makeText(getApplicationContext(), "count not load weather data " + error.toString(), Toast.LENGTH_SHORT).show());
-                    openApi.getCityData((City) spinner.getSelectedItem(),
-                            OpenApi.Data.FORECAST,
-                            response -> {
-                                forecastText = parseForecast(response);
-                                weather.setText(weatherText + forecastText);
-                            },
-                            error -> Toast.makeText(getApplicationContext(), "count not load forecast data " + error.toString(), Toast.LENGTH_SHORT).show());
-                }
+                handleSelectedItem();
             }
 
             @Override
@@ -103,5 +90,52 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addCityButton:
+                Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+                City city = new City(cityEditText.getText().toString(), countryCodeEditText.getText().toString());
+                addedCities.add(city);
+                citiesAdapter.clear();
+                citiesAdapter.addAll(addedCities);
+                spinner.setSelection(citiesAdapter.getPosition(city), true);
+                handleSelectedItem();
+                break;
+        }
+    }
+
+    private void handleSelectedItem() {
+        if (spinner.getSelectedItem() != null) {
+            openApi.getCityData((City) spinner.getSelectedItem(),
+                    OpenApi.Data.WEATHER,
+                    response -> {
+                        weatherText = parseWeather(response);
+                        weather.setText(weatherText + forecastText);
+                    },
+                    error -> {
+                        try {
+                            Toast.makeText(getApplicationContext(), "count not load weather data " + new JSONObject(new String(error.networkResponse.data)).optString("message"),
+                                    Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
+            openApi.getCityData((City) spinner.getSelectedItem(),
+                    OpenApi.Data.FORECAST,
+                    response -> {
+                        forecastText = parseForecast(response);
+                        weather.setText(weatherText + forecastText);
+                    },
+                    error -> {
+                        try {
+                            Toast.makeText(getApplicationContext(), "count not load forecast data " + new JSONObject(new String(error.networkResponse.data)).optString("message"),
+                                    Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }
     }
 }
