@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                handleSelectedItem();
+                handleSpinnerSelectedItem();
             }
 
             @Override
@@ -101,12 +101,12 @@ public class MainActivity extends AppCompatActivity {
                 citiesAdapter.clear();
                 citiesAdapter.addAll(addedCities);
                 spinner.setSelection(citiesAdapter.getPosition(city), true);
-                handleSelectedItem();
+                handleSpinnerSelectedItem();
                 break;
         }
     }
 
-    private void handleSelectedItem() {
+    private void handleSpinnerSelectedItem() {
         if (spinner.getSelectedItem() != null) {
             openApi.getCityData((City) spinner.getSelectedItem(),
                     OpenApi.Data.WEATHER,
